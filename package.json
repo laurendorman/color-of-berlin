@@ -1,0 +1,17 @@
+{
+  "name": "color-of-berlin",
+  "version": "1.0.0",
+  "description": "The color of the sky in Berlin.",
+  "scripts": {
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write ."
+  },
+  "dependencies": {
+    "canvas": "2.6.1",
+    "dotenv": "8.2.0",
+    "twitter": "1.7.1"
+  },
+  "devDependencies": {
+    "prettier": "2.0.4"
+  }
+}
