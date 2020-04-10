@@ -1,6 +1,6 @@
 {
   "name": "color-of-berlin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The color of the sky in Berlin.",
   "scripts": {
     "prettier:check": "prettier --check .",

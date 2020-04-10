@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const { colors } = require("./colors");
 
 const getSkyColor = (img, canvas) => {
@@ -6,31 +8,8 @@ const getSkyColor = (img, canvas) => {
   canvas.height = img.height;
   ctx.drawImage(img, 0, 0);
 
-  const padding = 1;
-  const cut = 0.6;
-  const data = ctx.getImageData(
-    padding /* Top padding */,
-    padding /* Left padding */,
-    img.width - 2 * padding /* Width */,
-    Math.round((img.height - 2 * padding) * cut)
-  ).data;
-
-  /* Calculate the average color */
-  let color = [0, 0, 0];
-  let i;
-  let j;
-
-  for (i = 0; i < data.length; i += 4) {
-    for (j = 0; j < 3; j++) {
-      color[j] += data[i + j];
-    }
-  }
-
-  const count = data.length / 4;
-
-  color = color.map((c) => {
-    return Math.round(c / count);
-  });
+  const data = ctx.getImageData(0, 0, img.width / 2, img.height / 2).data;
+  const color = [data[4], data[5], data[6]];
 
   return color;
 };
@@ -40,7 +19,7 @@ const hex = (color) => {
     .map((c) => {
       return c.toString(16);
     })
-    .join("");
+    .join('');
 };
 
 const findNearest = (rgb) => {

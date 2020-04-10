@@ -48,12 +48,12 @@ const loop = () => {
 }
 
 const getImage = (callback) => {
-  const url = "http://www.met.fu-berlin.de/wetter/webcam/picam2_prev.jpg";
+  const url = "http://www.met.fu-berlin.de/wetter/webcam/picam2_prod.jpg";
 
   const req = http.get(url, (res) => {
     if (res.statusCode == 200) {
       const chunks = [];
-      res.on("data", function (chunk) {
+      res.on("data", (chunk) => {
         chunks.push(chunk);
       });
       res.on("end", () => {
