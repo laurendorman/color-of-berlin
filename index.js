@@ -1,7 +1,7 @@
 const Twitter = require("twitter");
 const http = require("http");
 const { Image, createCanvas } = require("canvas");
-const { getSkyColor, findNearest, hex } = require("./tools");
+const { getColor, findNearest, hex } = require("./tools");
 const fs = require("fs");
 
 if (process.env.NODE_ENV !== "production") {
@@ -15,8 +15,8 @@ const client = new Twitter({
   access_token_secret: process.env.TWITTER_API_TOKEN_SECRET,
 });
 
-const MIN_SLEEP = 0.5 * 60 * 60 * 1000;
-const MAX_SLEEP = 1.5 * 60 * 60 * 1000;
+const MIN_SLEEP_TIME = 0.25 * 60 * 60 * 1000;
+const MAX_SLEEP_TIME = 0.5 * 60 * 60 * 1000;
 
 let lastColor;
 
@@ -25,7 +25,7 @@ const loop = () => {
     const img = new Image();
     img.src = src;
     const canvas = createCanvas();
-    const color = getSkyColor(img, canvas);
+    const color = getColor(img, canvas);
     const hexValue = hex(color);
     const name = findNearest(color);
     if (lastColor != name) {
@@ -36,7 +36,7 @@ const loop = () => {
     }
   });
 
-  const sleep = Math.round(MIN_SLEEP + Math.random() * (MAX_SLEEP - MIN_SLEEP));
+  const sleep = Math.round(MIN_SLEEP_TIME + Math.random() * (MAX_SLEEP_TIME - MIN_SLEEP_TIME));
   console.log(
     "Bot is sleeping for " +
       sleep / 60 / 1000 +
