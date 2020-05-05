@@ -1,8 +1,6 @@
-const fs = require("fs");
-
 const { colors } = require("./colors");
 
-const getSkyColor = (img, canvas) => {
+const getColor = (img, canvas) => {
   const ctx = canvas.getContext("2d");
   canvas.width = img.width;
   canvas.height = img.height;
@@ -43,6 +41,6 @@ const colorDistance = (color1, color2) => {
   );
 };
 
-exports.getSkyColor = getSkyColor;
+exports.getColor = getColor;
 exports.hex = hex;
 exports.findNearest = findNearest;
