@@ -332,7 +332,7 @@ const colors = [
   ["hunter green", [53, 94, 59]],
   ["iceberg", [113, 166, 210]],
   ["icterine", [252, 247, 94]],
-  ["illuminating", [245, 223, 77]]
+  ["illuminating", [245, 223, 77]],
   ["imperial blue", [0, 35, 149]],
   ["inchworm", [178, 236, 93]],
   ["india green", [19, 136, 8]],
