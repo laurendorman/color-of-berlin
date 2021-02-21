@@ -103,23 +103,25 @@ const sendUpdate = (name, hex) => {
         media_ids: data.media_id_string,
       };
 
-      console.log(status);
+      client.post("statuses/update", status, (error, status, response) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log("Status updated.");
+        }
+      });
 
-      // client.post("statuses/update", status, (error, status, response) => {
-      //   if (error) {
-      //     console.error(error);
-      //   } else {
-      //     console.log("Status updated.");
-      //   }
-      // });
-
-      // client.post("account/update_profile_banner", { banner: image }, (error, data, response) => {
-      //   if (error) {
-      //     console.error(error);
-      //   } else {
-      //     console.log("Profile banner updated.");
-      //   }
-      // });
+      client.post(
+        "account/update_profile_banner",
+        { banner: image },
+        (error, data, response) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log("Profile banner updated.");
+          }
+        }
+      );
     }
   );
 };
