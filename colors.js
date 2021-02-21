@@ -134,7 +134,6 @@ const colors = [
   ["cerulean frost", [109, 155, 195]],
   ["chamoisee", [160, 120, 90]],
   ["champagne", [250, 214, 165]],
-  ["charcoal", [54, 69, 79]],
   ["charm pink", [230, 143, 172]],
   ["cherry", [222, 49, 99]],
   ["cherry blossom pink", [255, 183, 197]],
