@@ -17,7 +17,7 @@ const hex = (color) => {
     .map((c) => {
       return c.toString(16);
     })
-    .join('');
+    .join("");
 };
 
 const findNearest = (rgb) => {

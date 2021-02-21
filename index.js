@@ -1,5 +1,5 @@
 const Twitter = require("twitter");
-const http = require("http");
+const https = require("https");
 const { Image, createCanvas } = require("canvas");
 const { getColor, findNearest, hex } = require("./tools");
 const fs = require("fs");
@@ -36,21 +36,23 @@ const loop = () => {
     }
   });
 
-  const sleep = Math.round(MIN_SLEEP_TIME + Math.random() * (MAX_SLEEP_TIME - MIN_SLEEP_TIME));
+  const sleep = Math.round(
+    MIN_SLEEP_TIME + Math.random() * (MAX_SLEEP_TIME - MIN_SLEEP_TIME)
+  );
   console.log(
     "Bot is sleeping for " +
       sleep / 60 / 1000 +
       " minutes, will return at " +
-			new Date(sleep + new Date().valueOf()).toString() +
-			"."
+      new Date(sleep + new Date().valueOf()).toString() +
+      "."
   );
   setTimeout(loop, sleep);
-}
+};
 
 const getImage = (callback) => {
-  const url = "http://www.met.fu-berlin.de/wetter/webcam/picam2_prod.jpg";
+  const url = process.env.SOURCE_IMAGE;
 
-  const req = http.get(url, (res) => {
+  const req = https.get(url, (res) => {
     if (res.statusCode == 200) {
       const chunks = [];
       res.on("data", (chunk) => {
@@ -61,14 +63,14 @@ const getImage = (callback) => {
         callback(src);
       });
     } else {
-      console.error("Error fetching image from FU-Berlin: " + res.statusCode);
+      console.error("Error fetching image from source: " + res.statusCode);
     }
   });
 
   req.on("error", (e) => {
     console.error("Request Error: " + e.message);
   });
-}
+};
 
 const updateWithImage = (name, hex) => {
   const canvas = createCanvas();
@@ -84,36 +86,42 @@ const updateWithImage = (name, hex) => {
     if (err) throw err;
     sendUpdate(name, hex);
   });
-}
+};
 
 const sendUpdate = (name, hex) => {
   const image = fs.readFileSync("output.png", "base64");
 
-  client.post("media/upload", { media_data: image }, (error, data, response) => {
-    if (error) {
-      console.error(error);
+  client.post(
+    "media/upload",
+    { media_data: image },
+    (error, data, response) => {
+      if (error) {
+        console.error(error);
+      }
+      const status = {
+        status: `The color of the sky in ${process.env.LOCATION} is ${name}. #${hex}`,
+        media_ids: data.media_id_string,
+      };
+
+      console.log(status);
+
+      // client.post("statuses/update", status, (error, status, response) => {
+      //   if (error) {
+      //     console.error(error);
+      //   } else {
+      //     console.log("Status updated.");
+      //   }
+      // });
+
+      // client.post("account/update_profile_banner", { banner: image }, (error, data, response) => {
+      //   if (error) {
+      //     console.error(error);
+      //   } else {
+      //     console.log("Profile banner updated.");
+      //   }
+      // });
     }
-    const status = {
-      status: `The color of the sky in Berlin is ${name}. #${hex}`,
-      media_ids: data.media_id_string,
-    };
-
-    client.post("statuses/update", status, (error, status, response) => {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log("Status updated.");
-      }
-    });
-
-    client.post("account/update_profile_banner", { banner: image }, (error, data, response) => {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log("Profile banner updated.");
-      }
-    });
-  });
-}
+  );
+};
 
 loop();
