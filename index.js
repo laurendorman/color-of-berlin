@@ -1,5 +1,5 @@
 const Twitter = require("twitter");
-const https = require("https");
+const http = require("http");
 const { Image, createCanvas } = require("canvas");
 const { getColor, findNearest, hex } = require("./tools");
 const fs = require("fs");
@@ -9,11 +9,15 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const client = new Twitter({
-  consumer_key: process.env.TWITTER_API_CONSUMER_KEY,
-  consumer_secret: process.env.TWITTER_API_CONSUMER_SECRET,
-  access_token_key: process.env.TWITTER_API_TOKEN,
-  access_token_secret: process.env.TWITTER_API_TOKEN_SECRET,
+  consumer_key: process.env.TWITTER_API_CONSUMER_KEY || '',
+  consumer_secret: process.env.TWITTER_API_CONSUMER_SECRET || '',
+  access_token_key: process.env.TWITTER_API_TOKEN || '',
+  access_token_secret: process.env.TWITTER_API_TOKEN_SECRET || '',
 });
+
+const LOCATION = process.env.LOCATION || "Berlin";
+const SOURCE_IMAGE = process.env.SOURCE_IMAGE || 
+  "http://www.met.fu-berlin.de/wetter/webcam/picam2_prod.jpg";
 
 const MIN_SLEEP_TIME = 0.25 * 60 * 60 * 1000;
 const MAX_SLEEP_TIME = 0.5 * 60 * 60 * 1000;
@@ -50,9 +54,7 @@ const loop = () => {
 };
 
 const getImage = (callback) => {
-  const url = process.env.SOURCE_IMAGE;
-
-  const req = https.get(url, (res) => {
+  const req = http.get(SOURCE_IMAGE, (res) => {
     if (res.statusCode == 200) {
       const chunks = [];
       res.on("data", (chunk) => {
@@ -99,7 +101,7 @@ const sendUpdate = (name, hex) => {
         console.error(error);
       }
       const status = {
-        status: `The color of the sky in ${process.env.LOCATION} is ${name}. #${hex}`,
+        status: `The color of the sky in ${LOCATION} is ${name}. #${hex}`,
         media_ids: data.media_id_string,
       };
 

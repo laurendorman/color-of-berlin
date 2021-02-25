@@ -30,7 +30,7 @@ SOURCE_IMAGE=
 LOCATION=
 ```
 
-**Note:** If your source `SOURCE_IMAGE` URL uses HTTP instead of HTTPS, import the `http` package from Node in place of `https`.
+**Note:** If your source `SOURCE_IMAGE` URL uses HTTPS instead of HTTP, import the `https` package from Node in place of `http`.
 
 ## Send a tweet
 

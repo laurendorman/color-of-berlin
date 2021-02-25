@@ -725,7 +725,7 @@ const colors = [
   ["tyrian purple", [102, 2, 60]],
   ["ube", [136, 120, 195]],
   ["ufo green", [60, 208, 112]],
-  ["ultimate gray"], [147, 149, 151]],
+  ["ultimate gray", [147, 149, 151]],
   ["ultra pink", [255, 111, 255]],
   ["ultramarine", [18, 10, 143]],
   ["ultramarine blue", [65, 102, 245]],
