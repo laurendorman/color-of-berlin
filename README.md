@@ -30,8 +30,6 @@ SOURCE_IMAGE=
 LOCATION=
 ```
 
-**Note:** If your source `SOURCE_IMAGE` URL uses HTTPS instead of HTTP, import the `https` package from Node in place of `http`.
-
 ## Send a tweet
 
 - In the project directory, run `node index.js` from the command line to send a tweet.
