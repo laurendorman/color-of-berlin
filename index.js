@@ -1,5 +1,6 @@
 const Twitter = require("twitter");
 const http = require("http");
+const https = require("https");
 const { Image, createCanvas } = require("canvas");
 const { getColor, findNearest, hex } = require("./tools");
 const fs = require("fs");
@@ -45,16 +46,19 @@ const loop = () => {
   );
   console.log(
     "Bot is sleeping for " +
-      sleep / 60 / 1000 +
-      " minutes, will return at " +
-      new Date(sleep + new Date().valueOf()).toString() +
-      "."
+    sleep / 60 / 1000 +
+    " minutes, will return at " +
+    new Date(sleep + new Date().valueOf()).toString() +
+    "."
   );
   setTimeout(loop, sleep);
 };
 
 const getImage = (callback) => {
-  const req = http.get(SOURCE_IMAGE, (res) => {
+  const sourceUrl = new URL(SOURCE_IMAGE);
+  const get = sourceUrl.protocol === 'https:' ? https.get : http.get;
+
+  const req = get(SOURCE_IMAGE, (res) => {
     if (res.statusCode == 200) {
       const chunks = [];
       res.on("data", (chunk) => {
