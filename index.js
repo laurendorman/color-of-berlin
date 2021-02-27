@@ -1,4 +1,5 @@
 const Twitter = require("twitter");
+const http = require("http");
 const https = require("https");
 const { Image, createCanvas } = require("canvas");
 const { getColor, findNearest, hex } = require("./tools");
@@ -9,11 +10,15 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const client = new Twitter({
-  consumer_key: process.env.TWITTER_API_CONSUMER_KEY,
-  consumer_secret: process.env.TWITTER_API_CONSUMER_SECRET,
-  access_token_key: process.env.TWITTER_API_TOKEN,
-  access_token_secret: process.env.TWITTER_API_TOKEN_SECRET,
+  consumer_key: process.env.TWITTER_API_CONSUMER_KEY || "",
+  consumer_secret: process.env.TWITTER_API_CONSUMER_SECRET || "",
+  access_token_key: process.env.TWITTER_API_TOKEN || "",
+  access_token_secret: process.env.TWITTER_API_TOKEN_SECRET || "",
 });
+
+const LOCATION = process.env.LOCATION || "Berlin";
+const SOURCE_IMAGE = process.env.SOURCE_IMAGE || 
+  "http://www.met.fu-berlin.de/wetter/webcam/picam2_prod.jpg";
 
 const MIN_SLEEP_TIME = 0.25 * 60 * 60 * 1000;
 const MAX_SLEEP_TIME = 0.5 * 60 * 60 * 1000;
@@ -41,18 +46,19 @@ const loop = () => {
   );
   console.log(
     "Bot is sleeping for " +
-      sleep / 60 / 1000 +
-      " minutes, will return at " +
-      new Date(sleep + new Date().valueOf()).toString() +
-      "."
+    sleep / 60 / 1000 +
+    " minutes, will return at " +
+    new Date(sleep + new Date().valueOf()).toString() +
+    "."
   );
   setTimeout(loop, sleep);
 };
 
 const getImage = (callback) => {
-  const url = process.env.SOURCE_IMAGE;
+  const sourceUrl = new URL(SOURCE_IMAGE);
+  const get = sourceUrl.protocol === 'https:' ? https.get : http.get;
 
-  const req = https.get(url, (res) => {
+  const req = get(SOURCE_IMAGE, (res) => {
     if (res.statusCode == 200) {
       const chunks = [];
       res.on("data", (chunk) => {
@@ -99,7 +105,7 @@ const sendUpdate = (name, hex) => {
         console.error(error);
       }
       const status = {
-        status: `The color of the sky in ${process.env.LOCATION} is ${name}. #${hex}`,
+        status: `The color of the sky in ${LOCATION} is ${name}. #${hex}`,
         media_ids: data.media_id_string,
       };
 
