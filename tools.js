@@ -15,7 +15,8 @@ const getColor = (img, canvas) => {
 const hex = (color) => {
   return color
     .map((c) => {
-      return c.toString(16);
+      const hex = c.toString(16);
+      return hex.length === 1 ? "0" + hex : hex;
     })
     .join("");
 };
@@ -37,7 +38,7 @@ const colorDistance = (color1, color2) => {
   return Math.sqrt(
     Math.pow(color1[0] - color2[0], 2) +
       Math.pow(color1[1] - color2[1], 2) +
-      Math.pow(color1[2] - color2[2], 2)
+      Math.pow(color1[2] - color2[2], 2),
   );
 };
 

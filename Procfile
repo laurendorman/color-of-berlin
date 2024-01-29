@@ -1,1 +1,0 @@
-bot: node index.js

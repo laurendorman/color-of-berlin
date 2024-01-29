@@ -1,4 +1,12 @@
+# node_modules
 node_modules
+
+# .env
 .env
-output.png
+
+# misc
+.DS_Store
+.idea/
+
+# private temporary
 data
